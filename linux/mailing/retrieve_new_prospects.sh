@@ -182,10 +182,38 @@ function copy_new {
     is_ok $? "mark_known"
 }
 
+# Coppying new prospects in a dir
+function send_new {
+    log "Prepared to send"
+    if [ "$(ls -A ${new_dir})" ]; then
+         for file in ${new_dir}/*; do
+              echo "Send $file ,[O/n/stop]"
+              read answer
+              if [ "$answer" == "n" ]; then
+                   echo "Mail not sent"
+                   rm ${file}
+              elif [ "$answer" == "stop" ]; then
+                   echo "Stopping"
+                   rm ${file}
+                   break
+              elif [ "$answer" == "" ]||[ "$answer" == "O" ]; then
+                   sendmail -i -t < ${file}
+                   touch sent_`basename ${file}`
+              else
+                   echo "Error"
+                   break
+              fi
+         done
+    else
+         echo "Nothing to send"
+    fi
+}
+
 function main {
-    mark_sent
+    #mark_sent
     get_prospects
     copy_new
+    send_new
 }
 
 #=====================================================================
