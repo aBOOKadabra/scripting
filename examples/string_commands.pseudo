@@ -1,0 +1,99 @@
+#Operator: ${foo#t*is}
+#
+#Function: deletes the shortest possible match from the left
+#
+#Example:
+
+export foo="this is a test"
+echo ${foo#t*is}
+# => is a test
+
+#Operator: ${foo##t*is}
+#
+#Function: deletes the longest possible match from the left
+#
+#Example:
+
+export foo="this is a test"
+echo ${foo##t*is}
+# => a test
+
+#Operator: ${foo%t*st}
+#
+#Function: deletes the shortest possible match from the right
+#
+#Example:
+
+export foo="this is a test"
+echo ${foo%t*st}
+# => this is a
+
+#Operator: ${foo%%t*st}
+#
+#Function: deletes the longest possible match from the right
+#
+#Example:
+
+export foo="this is a test"
+echo ${foo%%t*st}
+# => 
+
+#Operator: ${foo:-bar}
+#
+#Function: If $foo exists and is not null, return $foo. If it doesn't exist or is null, return bar.
+#
+#Example:
+
+export foo=""
+echo ${foo:-one}
+# => one
+echo $foo
+# =>
+
+#Operator: ${foo:=bar}
+#
+#Function: If $foo exists and is not null, return $foo. If it doesn't exist or is null, set $foo to bar and return bar.
+#
+#Example:
+
+export foo=""
+echo ${foo:=one}
+# => one
+echo $foo
+# => one
+
+#Operator: ${foo:+bar}
+#
+#Function: If $foo exists and is not null, return bar. If it doesn't exist or is null, return a null.
+#
+#Example:
+
+export foo="this is a test"
+echo ${foo:+bar}
+# => bar
+
+#Operator: ${foo:?"error message"}
+#
+#Function: If $foo exists and isn't null, return its value. If it doesn't exist or is null, print the error message. If no error message is given, it prints parameter null or not set. In a non-interactive shell, this aborts the current script. In an interactive shell, this simply prints the error message.
+#
+#Example:
+
+export foo="one"
+for i in foo bar baz; do
+eval echo \${$i:?}
+done
+# => one
+# => bash: bar: parameter null or not set
+# => bash: baz: parameter null or not set
+
+# The : in the above operators can be omitted. Doing so changes the behavior of the operator so that it simply tests for the existence of the variable. This, in turn, causes the creation of a variable, for example:
+
+export foo="this is a test"
+echo $bar
+# =>
+echo ${foo=bar}
+# => this is a test
+$ echo ${bar=bar}
+# => bar
+$ echo $bar
+# => bar
