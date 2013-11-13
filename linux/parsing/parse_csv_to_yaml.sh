@@ -156,17 +156,20 @@ function parse_author {
 cat $file_to_parse | $awk_bin 'BEGIN { print "authors:";
               FS=";"}
       $1 ~ /Head 1/ {  split($0, cat, ";") }
-      $1 ~ /Auteur/ { split ($1, author, " ");print "    - &"author[1]author[2]" !!models.Author" }
+      $1 ~ /Auteur/ { print "    - &"$1" !!models.Author" }
       $1 ~ /Auteur/ { print "         fullname:"}
-      $1 ~ /Auteur/ { split ($2, fullname, " "); print "               name:          "fullname[2]" "fullname[3]"\n               firstname:     "fullname[1]}
+      $1 ~ /Auteur/ { print "               name:               "$3}
+      $1 ~ /Auteur/ { print "               firstname:          "$2}
       $1 ~ /Auteur/ { print "         score:"}
-      $1 ~ /Auteur/ { print "               bestseller:    "$34}
-      $1 ~ /Auteur/ { print "               classical:     "$35}
-      $1 ~ /Auteur/ { print "               ico:           "$36}
-      $1 ~ /Auteur/ { print "               hard:          "$37}
-      $1 ~ /Auteur/ { split ($1, author, " ");print "               author:        *"author[1]author[2]}
+      $1 ~ /Auteur/ { print "               bestseller:    "$40}
+      $1 ~ /Auteur/ { print "               classical:     "$41}
+      $1 ~ /Auteur/ { print "               ico:           "$42}
+      $1 ~ /Auteur/ { print "               hard:          "$43}
+      $1 ~ /Auteur/ { print "               author:        *"$1}
+      $1 ~ /Auteur/ && $4 != "" { print "         alias:              ["$4"]"}
+      $1 ~ /Auteur/ && $45 != "" { print "         tags:              "$45}
       $1 ~ /Auteur/ { print "         categories:"}
-      $1 ~ /Auteur/ { for (i=4;i<=33;i++) {
+      $1 ~ /Auteur/ { for (i=7;i<=39;i++) {
                             if ($i != "") {
                                 {print "            - {category: *"cat[i]", percentage: "$i" }" }
                             }
@@ -177,6 +180,22 @@ cat $file_to_parse | $awk_bin 'BEGIN { print "authors:";
 ' > $output_file
 
 }
+
+function parse_category {
+cat $file_to_parse | $awk_bin 'BEGIN { print "bookCategories:";
+              FS=";"}
+      $1 ~ /Category/ { print "    - &"$3" !!models.BookCategory" }
+      $1 ~ /Category/ { print "         name:                 "$4}
+      $1 ~ /Category/ { print "         type:                 "$5}
+      $1 ~ /Category/ { print "         description:          "$7}
+      $1 ~ /Category/ && $2 != "" { print "         parent:              *"$2}
+      $1 ~ /Category/ && $6 != "" { print "         tags:                 "$6}
+      $1 ~ /Category/ && $8 != "" { print "         claim:                "$8}
+      $1 ~ /Category/ { print ""}
+      END   { print "#Fin" }
+' > $output_file
+}
+
 
 function main {
     function_exists parse_$action
