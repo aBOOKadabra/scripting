@@ -163,8 +163,8 @@ cat $file_to_parse | $awk_bin 'BEGIN { print "authors:";
       $1 ~ /Auteur/ { print "         score:"}
       $1 ~ /Auteur/ { print "               bestseller:    "$40}
       $1 ~ /Auteur/ { print "               classical:     "$41}
-      $1 ~ /Auteur/ { print "               ico:           "$42}
-      $1 ~ /Auteur/ { print "               hard:          "$43}
+      $1 ~ /Auteur/ { print "               hard:          "$42}
+      $1 ~ /Auteur/ { print "               ico:           "$43}
       $1 ~ /Auteur/ { print "               author:        *"$1}
       $1 ~ /Auteur/ && $4 != "" { print "         alias:              ["$4"]"}
       $1 ~ /Auteur/ && $45 != "" { print "         tags:              "$45}
